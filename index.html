@@ -1,291 +1,442 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vansh & Priyanshu | Creative Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal</title>
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-      scroll-behavior: smooth;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
-      background: radial-gradient(circle at 20% 20%, #0d1117, #05070a);
-      color: #f0f6fc;
+      background: radial-gradient(circle at 50% 20%, #1e1e2f, #0a0a12 80%);
+      color: #f1f5f9;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
       overflow-x: hidden;
     }
 
-    /* Ambient background glows */
-    .glow-spot {
-      position: fixed;
-      width: 450px;
-      height: 450px;
-      border-radius: 50%;
-      filter: blur(120px);
-      z-index: -1;
-      opacity: 0.15;
-      pointer-events: none;
+    .header-text {
+      text-align: center;
+      margin-bottom: 24px;
     }
-    .glow-1 { top: -50px; left: -100px; background: #00f0ff; }
-    .glow-2 { bottom: 50px; right: -50px; background: #a855f7; }
 
-    /* Sticky Navigation */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 8%;
-      background: rgba(13, 17, 23, 0.7);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 700;
+    .header-text h1 {
+      font-size: 1.8rem;
       letter-spacing: 1px;
-      background: linear-gradient(90deg, #00f0ff, #a855f7);
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .nav-links a {
-      color: #8b949e;
-      text-decoration: none;
-      margin-left: 20px;
-      transition: color 0.3s;
-      font-weight: 500;
-    }
-    .nav-links a:hover {
-      color: #00f0ff;
+
+    .header-text p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-top: 6px;
     }
 
-    /* Hero & Profile Section */
-    .hero {
-      padding: 60px 8% 40px;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-    }
-    .hero h1 span {
-      background: linear-gradient(90deg, #00f0ff, #7928ca);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero p {
-      color: #8b949e;
-      font-size: 1.1rem;
-      max-width: 600px;
-      margin: 0 auto 40px;
+    .scene {
+      width: 100%;
+      max-width: 380px;
+      height: 520px;
+      perspective: 1200px;
     }
 
-    /* 3D Tilt Cards Container */
-    .cards-container {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      perspective: 1000px;
-      margin-bottom: 50px;
-    }
-
-    .tilt-card {
-      width: 330px;
-      background: rgba(22, 27, 34, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 30px 20px;
-      text-align: center;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.1s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-    .tilt-card:hover {
-      box-shadow: 0 15px 35px rgba(0, 240, 255, 0.2);
-      border-color: rgba(0, 240, 255, 0.4);
-    }
-    .profile-img-container {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 20px;
-      border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(135deg, #00f0ff, #a855f7);
-      transform: translateZ(30px);
-    }
-    .profile-img {
+    .card-wrap {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #161b22;
+      position: relative;
+      transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
     }
-    .tilt-card h2 {
-      font-size: 1.45rem;
-      margin-bottom: 5px;
-      transform: translateZ(25px);
+
+    .card-wrap.is-flipped {
+      transform: rotateY(180deg);
     }
-    .tilt-card .role {
-      color: #00f0ff;
-      font-size: 0.95rem;
-      margin-bottom: 15px;
-      transform: translateZ(20px);
-      font-weight: 600;
-    }
-    .tilt-card .bio {
-      color: #8b949e;
-      font-size: 0.85rem;
-      line-height: 1.5;
-      margin-bottom: 20px;
-      transform: translateZ(15px);
-    }
-    .social-tags {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      transform: translateZ(20px);
-      flex-wrap: wrap;
-    }
-    .tag {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      background: rgba(22, 27, 34, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #c9d1d9;
-    }
-
-    /* Hero Jump Button */
-    .cta-container {
-      margin-top: 20px;
-    }
-    .btn-glow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: linear-gradient(90deg, #00f0ff, #7928ca);
-      color: #05070a;
-      font-weight: 700;
-      padding: 14px 32px;
-      border-radius: 30px;
-      text-decoration: none;
-      font-size: 1rem;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-      transition: all 0.3s ease;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-glow:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.7);
-      color: #000;
-    }
-
-    /* Projects Section */
-    .projects-section {
-      padding: 80px 8%;
-      background: rgba(13, 17, 23, 0.5);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .section-title {
-      text-align: center;
-      font-size: 2.2rem;
-      margin-bottom: 10px;
-    }
-    .section-desc {
-      text-align: center;
-      color: #8b949e;
-      margin-bottom: 40px;
-    }
-
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 25px;
-    }
-    .project-card {
-      background: #161b22;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56, 189, 248, 0.1);
+      padding: 28px 22px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: all 0.3s ease;
-    }
-    .project-card:hover {
-      transform: translateY(-6px);
-      border-color: #a855f7;
-      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.2);
-    }
-    .badge {
-      align-self: flex-start;
-      font-size: 0.7rem;
-      padding: 4px 10px;
-      border-radius: 8px;
-      background: rgba(0, 240, 255, 0.1);
-      color: #00f0ff;
-      margin-bottom: 15px;
-      font-weight: 600;
-    }
-    .project-card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 10px;
-    }
-    .project-card p {
-      color: #8b949e;
-      font-size: 0.85rem;
-      margin-bottom: 20px;
-      line-height: 1.5;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
-    /* Animated Action Buttons */
-    .card-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 15px;
+    .card-front {
+      border-top: 2px solid #38bdf8;
     }
-    .action-btn {
-      flex: 1;
+
+    .card-back {
+      transform: rotateY(180deg);
+      border-top: 2px solid #a855f7;
+    }
+
+    .profile-top {
       text-align: center;
-      padding: 10px 0;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 0.85rem;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      background: #0f172a;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .avatar.cyan { color: #38bdf8; border-color: #38bdf8; }
+    .avatar.purple { color: #a855f7; border-color: #a855f7; }
+
+    .name {
+      font-size: 1.3rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    .files-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #e2e8f0;
+      transition: all 0.2s ease;
+    }
+
+    .file-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateX(4px);
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-icon {
+      font-size: 1.2rem;
+    }
+
+    .file-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .file-badge {
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+
+    .flip-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
       cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #00f0ff, #7928ca);
-      color: #05070a;
-      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.2);
-    }
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5);
-      color: #000;
+    .btn-cyan {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #0f172a;
     }
 
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      color: #c9d1d9;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(5px);
+    .btn-purple {
+      background: linear-gradient(135deg, #7e22ce, #c084fc);
+      color: #0f172a;
     }
+
+    .hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-text">
+    <h1>Student Portal</h1>
+    <p>Card ghumane ke liye button dabayein</p>
+  </div>
+
+  <div class="scene">
+    <div class="card-wrap" id="cardContainer">
+      
+      <!-- FRONT SIDE -->
+      <div class="card-face card-front">
+        <div class="profile-top">
+          <div class="avatar cyan">D</div>
+          <div class
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #1e1e2f, #0a0a12 80%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .header-text {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header-text h1 {
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-text p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-top: 6px;
+    }
+
+    .scene {
+      width: 100%;
+      max-width: 380px;
+      height: 520px;
+      perspective: 1200px;
+    }
+
+    .card-wrap {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .card-wrap.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      background: rgba(22, 27, 34, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56, 189, 248, 0.1);
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .card-front {
+      border-top: 2px solid #38bdf8;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      border-top: 2px solid #a855f7;
+    }
+
+    .profile-top {
+      text-align: center;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      background: #0f172a;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .avatar.cyan { color: #38bdf8; border-color: #38bdf8; }
+    .avatar.purple { color: #a855f7; border-color: #a855f7; }
+
+    .name {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    .files-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #e2e8f0;
+      transition: all 0.2s ease;
+    }
+
+    .file-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateX(4px);
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-icon {
+      font-size: 1.2rem;
+    }
+
+    .file-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .file-badge {
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+
+    .flip-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-cyan {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #0f172a;
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #7e22ce, #c084fc);
+      color: #0f172a;
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-text">
+    <h1>Student Portal</h1>
+    <p>Card ghumane ke liye button dabayein</p>
+  </div>
+
+  <div class="scene">
+    <div class="card-wrap" id="cardContainer">
+      
+      <!-- FRONT SIDE -->
+      <div class="card-face card-front">
+        <div class="profile-top">
+          <div class="avatar cyan">D</div>
+          <div class
